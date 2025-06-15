@@ -1,0 +1,73 @@
+union PokemonResult = Pokemon | InvalidInputError | DuplicateIdError | InexistentTypeError | InexistentPokemonError | DuplicateTypesError
+
+union DeleteUnion = DeleteResult | InexistentPokemonError
+
+interface BaseError {
+  message: String!
+}
+ 
+type InvalidInputError implements BaseError {
+  message: String!
+}
+
+type DuplicateIdError implements BaseError {
+  message: String!
+}
+
+type InexistentTypeError implements BaseError {
+  message: String!
+}
+
+type InexistentPokemonError implements BaseError {
+  message: String!
+}
+
+type DuplicateTypesError implements BaseError {
+  message: String!
+}
+
+type DeleteResult {
+  status: Boolean
+}
+
+type Type {
+  name: String
+}
+
+type Pokemon {
+  type: Type
+  secondaryType: Type
+  name: String
+  id: Int
+}
+
+input CreateOnePokemon {
+  type: String!
+  secondaryType: String
+  name: String!
+  id: Int!
+}
+
+input UpdateOnePokemon {
+  type: String
+  secondaryType: String
+  name: String
+  id: Int!
+}
+
+input FindManyPokemon {
+  type: String
+  name: String
+  id: Int
+}
+
+type Query {
+  findManyPokemon(filter: FindManyPokemon): [Pokemon!]
+}
+
+type Mutation {
+  deleteOnePokemon(id: Int!): DeleteUnion!
+  createOnePokemon(pokemon: CreateOnePokemon): PokemonResult!
+  updateOnePokemon(pokemon: UpdateOnePokemon): PokemonResult!
+}
+

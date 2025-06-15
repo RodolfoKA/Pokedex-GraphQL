@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../../app.module';
 
-describe('"hello" module tests', () => {
+describe('"pokemon" module tests', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -15,16 +15,27 @@ describe('"hello" module tests', () => {
     await app.init();
   });
 
-  it('should return "Hello World!"', async () => {
+  it('should return 151 entries', async () => {
     const response: any = await request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: `query hello {
-					hello
-				}`,
+        query: 
+        `query
+    findManyPokemon {
+        findManyPokemon(filter:{}) {
+            id
+            name
+            type {
+                name
+            }
+            secondaryType {
+                name
+            }
+        }
+    }`,
       });
 
     expect(response.body.errors).toBeUndefined();
-    expect(response.body.data.hello).toBe('Hello World!');
+    expect(response.body.data.findManyPokemon).toHaveLength(151);
   });
 });
