@@ -1,8 +1,13 @@
 import prisma from './prisma.client';
 import { pokemons } from './data/pokemon';
+import { types } from './data/types';
 
 async function main() {
   await prisma.pokemon.deleteMany();
+  await prisma.types.deleteMany();
+  await prisma.types.createMany({
+    data: types,
+  })
   await prisma.pokemon.createMany({
     data: pokemons,
   });

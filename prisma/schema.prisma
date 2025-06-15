@@ -7,9 +7,22 @@ datasource db {
   url      = "file:../database/database_prisma.sqlite"
 }
 
+model Types {
+  id Int @id @default(autoincrement())
+  created_at DateTime @default(now())
+  name String @unique
+  pokemon Pokemon[] @relation("type")
+  secondaryPokemon Pokemon[] @relation("secondaryType")
+
+  @@map("types")
+}
+
 model Pokemon {
   name String
-  type String
+  typeId Int
+  type Types @relation("type", fields:[typeId], references: [id])
+  secondaryTypeId Int?
+  secondaryType Types? @relation("secondaryType", fields:[secondaryTypeId], references: [id])
 
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
